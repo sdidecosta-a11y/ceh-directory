@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Excellence Hub | Relocation Directory</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body.intro-active { overflow: hidden; }
+        .category-btn.active {
+            background-color: #059669; color: white; border-color: #059669;
+            box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.3);
+        }
+        .filter-scroll::-webkit-scrollbar { height: 6px; }
+        .filter-scroll::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .filter-scroll::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans antialiased text-slate-800 intro-active">
+
+    <!-- Video Intro Overlay -->
+    <div id="intro-overlay" class="fixed inset-0 bg-white z-[100] flex flex-col items-center justify-center transition-opacity duration-700 ease-in-out">
+        <button id="skip-btn" class="absolute top-6 right-6 z-[110] px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full text-xs font-bold tracking-wider uppercase transition-colors shadow-sm border border-slate-200 flex items-center">
+            Skip <i class="fa-solid fa-forward-step ml-2"></i>
+        </button>
+
+        <div class="relative w-full max-w-3xl px-4 flex items-center justify-center h-full">
+            <video id="intro-video" class="w-full max-h-[80vh] object-contain rounded-2xl shadow-2xl bg-black/5" autoplay muted playsinline>
+                <source src="intro.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="relative bg-gradient-to-r from-blue-900 via-blue-800 to-emerald-700 text-white shadow-lg sticky top-0 z-50 overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Neighborhood" class="absolute inset-0 w-full h-full object-cover opacity-20 pointer-events-none mix-blend-overlay">
+        <div class="relative z-10 max-w-6xl mx-auto px-4 py-5 sm:px-6 lg:px-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-xl sm:text-2xl font-bold flex items-center drop-shadow-md">
+                    <i class="fa-solid fa-leaf mr-3 text-emerald-400"></i> Customer Excellence Hub
+                </h1>
+                <p class="text-blue-100 text-sm mt-1 font-medium tracking-wide">Commercial Bank of Ceylon PLC - Neighborhood Guide</p>
+            </div>
+            <div class="hidden sm:block text-4xl opacity-80 drop-shadow-lg transform hover:scale-110 transition-transform duration-300">
+                <i class="fa-solid fa-map-location-dot"></i>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        
+        <!-- Filters -->
+        <div class="mb-8 overflow-x-auto pb-4 filter-scroll">
+            <div class="flex space-x-3 min-w-max" id="filter-container">
+                <button onclick="filterItems('all', this)" class="category-btn active px-5 py-2.5 rounded-full border border-gray-300 bg-white text-sm font-bold transition-all hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200">All Places</button>
+                <button onclick="filterItems('food', this)" class="category-btn px-5 py-2.5 rounded-full border border-gray-300 bg-white text-sm font-semibold transition-all hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200"><i class="fa-solid fa-utensils mr-2"></i>Food & Dining</button>
+                <button onclick="filterItems('transport', this)" class="category-btn px-5 py-2.5 rounded-full border border-gray-300 bg-white text-sm font-semibold transition-all hover:bg-sky-50 hover:text-sky-700 hover:border-sky-200"><i class="fa-solid fa-train-tram mr-2"></i>Transport & EV</button>
+                <button onclick="filterItems('finance', this)" class="category-btn px-5 py-2.5 rounded-full border border-gray-300 bg-white text-sm font-semibold transition-all hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200"><i class="fa-solid fa-building-columns mr-2"></i>Banking & ATMs</button>
+                <button onclick="filterItems('health', this)" class="category-btn px-5 py-2.5 rounded-full border border-gray-300 bg-white text-sm font-semibold transition-all hover:bg-teal-50 hover:text-teal-700 hover:border-teal-200"><i class="fa-solid fa-heart-pulse mr-2"></i>Health & Wellness</button>
+                <button onclick="filterItems('worship', this)" class="category-btn px-5 py-2.5 rounded-full border border-gray-300 bg-white text-sm font-semibold transition-all hover:bg-orange-50 hover:text-orange-700 hover:border-orange-200"><i class="fa-solid fa-place-of-worship mr-2"></i>Faith & Worship</button>
+                <button onclick="filterItems('utility', this)" class="category-btn px-5 py-2.5 rounded-full border border-gray-300 bg-white text-sm font-semibold transition-all hover:bg-slate-100 hover:text-slate-700 hover:border-slate-300"><i class="fa-solid fa-toolbox mr-2"></i>Utilities & Support</button>
+                <button onclick="filterItems('shopping', this)" class="category-btn px-5 py-2.5 rounded-full border border-gray-300 bg-white text-sm font-semibold transition-all hover:bg-fuchsia-50 hover:text-fuchsia-700 hover:border-fuchsia-200"><i class="fa-solid fa-cart-shopping mr-2"></i>Supermarkets & Retail</button>
+                <button onclick="filterItems('drinks', this)" class="category-btn px-5 py-2.5 rounded-full border border-gray-300 bg-white text-sm font-semibold transition-all hover:bg-indigo-50 hover:text-indigo-700 hover:border-indigo-200"><i class="fa-solid fa-martini-glass-citrus mr-2"></i>After Hours</button>
+                <button onclick="filterItems('emergency', this)" class="category-btn px-5 py-2.5 rounded-full border border-red-200 bg-white text-sm font-semibold transition-all hover:bg-red-50 hover:text-red-700 hover:border-red-300"><i class="fa-solid fa-truck-medical mr-2 text-red-600"></i>Emergency</button>
+            </div>
+        </div>
+
+        <div id="directory-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <!-- Injected by JS -->
+        </div>
+
+    </main>
+
+    <script>
+        // Intro Logic 
+        document.addEventListener("DOMContentLoaded", () => {
+            const introOverlay = document.getElementById('intro-overlay');
+            const introVideo = document.getElementById('intro-video');
+            const skipBtn = document.getElementById('skip-btn');
+            let isDismissed = false;
+            
+            function dismissIntro() {
+                if(isDismissed) return;
+                isDismissed = true;
+                introOverlay.classList.add('opacity-0');
+                introOverlay.classList.add('pointer-events-none');
+                setTimeout(() => {
+                    introOverlay.style.display = 'none';
+                    document.body.classList.remove('intro-active');
+                }, 700); 
+            }
+
+            introVideo.addEventListener('ended', dismissIntro);
+            skipBtn.addEventListener('click', dismissIntro);
+            setTimeout(dismissIntro, 8000);
+
+            let playPromise = introVideo.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    dismissIntro();
+                });
+            }
+        });
+
+        const directoryData = [
+            // Food & Dining
+            { category: 'food', title: 'Lotus Leaf Restaurant', link: 'https://maps.app.goo.gl/WCEwgk9wq5ZeDYwS8', icon: 'fa-bowl-rice', dist: '0.3 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'Salaka Foods', link: 'https://maps.app.goo.gl/oZWYrwWjj2yRWgtU7', icon: 'fa-utensils', dist: '0.3 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'Curry Box', link: 'https://maps.app.goo.gl/3z2yDsuUt3WhE66r6', icon: 'fa-bowl-food', dist: '0.1 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'Pizza Hut', link: 'https://maps.app.goo.gl/RDy4EFU7GzUWypDeA', icon: 'fa-pizza-slice', dist: '0.85 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'Domino’s Pizza', link: 'https://maps.app.goo.gl/7ysvmk4Ns3cXGDRG7', icon: 'fa-pizza-slice', dist: '0.15 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'Rich Kitchen', link: 'https://maps.app.goo.gl/obNLRZJ64Ce6Bngn9', icon: 'fa-utensils', dist: '0.7 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'FLOW', link: 'https://maps.app.goo.gl/DDb5gxYtxuSGnCT68', icon: 'fa-utensils', dist: '1.2 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'Walanda', link: 'https://maps.app.goo.gl/5EimX2t4JnrMd4y49', icon: 'fa-bowl-rice', dist: '0.45 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'Shanmugas', link: 'https://maps.app.goo.gl/1sxyoQgxiossq87C6', icon: 'fa-leaf', dist: '0.35 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'Hela Bojun', link: 'https://maps.app.goo.gl/mmZcc8sDuMMYpXZo8', icon: 'fa-seedling', dist: '0.5 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'Kolamba Kade', link: 'https://maps.app.goo.gl/J4MMBCXBj4GRzXgx6', icon: 'fa-bowl-rice', dist: '0.65 km', color: 'text-emerald-700' },
+            { category: 'food', title: '668 Chinese Restaurant', link: 'https://maps.app.goo.gl/DKe6gaqzbnb5wUQC7', icon: 'fa-bowl-food', dist: '0.65 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'Upali’s by Nawaloka', link: 'https://maps.app.goo.gl/qDthibYLU8kQCPQH7', icon: 'fa-utensils', dist: '0.8 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'Sen-Saal Hyde Park', link: 'https://maps.app.goo.gl/mVvFrCjPAfYT4PJK8', icon: 'fa-utensils', dist: '0.6 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'Pizza Factory', link: 'https://maps.app.goo.gl/iX4BHLEjhi78s2zT9', icon: 'fa-pizza-slice', dist: '0.6 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'Caravan Fresh', link: 'https://maps.app.goo.gl/Ts7gyGopd8Nr5mNw8', icon: 'fa-bread-slice', dist: '0.7 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'Malar Cafe', link: 'https://maps.app.goo.gl/udNxAZBXEoHgMw9WA', icon: 'fa-mug-saucer', dist: '0.6 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'Nook Cafe', link: 'https://maps.app.goo.gl/GVVeBnHZ1eQmW3dp9', icon: 'fa-mug-hot', dist: '0.35 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'Roots', link: 'https://maps.app.goo.gl/oRVmAeBEnUoohWNu9', icon: 'fa-blender', dist: '0.35 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'Gonuts With Donuts', link: 'https://maps.app.goo.gl/Kuas8ZrgqZB9JNCJ8', icon: 'fa-cookie-bite', dist: '0.35 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'Koffee Kulture', link: 'https://maps.app.goo.gl/WMXv3sZ6vY3JVpCB6', icon: 'fa-mug-hot', dist: '0.65 km', color: 'text-emerald-700' },
+            { category: 'food', title: '360 by Coco Veranda', link: 'https://maps.app.goo.gl/WvvVLHKzz5GKjCCh7', icon: 'fa-mug-saucer', dist: '0.8 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'Simply Strawberries by Jagros', link: 'https://maps.app.goo.gl/9R3XWrVJRozqhnJQ9', icon: 'fa-ice-cream', dist: '1.9 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'Barista', link: 'https://maps.app.goo.gl/gjPuxavraFFHyA55A', icon: 'fa-mug-hot', dist: '1 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'The Brick Lane Coffeehouse', link: 'https://maps.app.goo.gl/pBxs97km5uMF4jPT7', icon: 'fa-mug-saucer', dist: '1 km', color: 'text-emerald-700' },
+            { category: 'food', title: 'Pick Me Food', link: '#', icon: 'fa-mobile-screen', color: 'text-emerald-700', note: 'App Only' },
+            { category: 'food', title: 'Uber Eats', link: '#', icon: 'fa-mobile-screen', color: 'text-emerald-700', note: 'App Only' },
+
+            // Transport & EV (UPDATED WITH SUBTITLES)
+            { category: 'transport', title: 'Maradana Railway', link: 'https://maps.app.goo.gl/GeaAdMdRWQxCHkXs6', icon: 'fa-train', dist: '3.4 km', color: 'text-sky-700' },
+            { category: 'transport', title: 'Kompannavidiya Railway', link: 'https://maps.app.goo.gl/Z4FJY5JspJbGQHNGA', icon: 'fa-train-subway', dist: '2 km', color: 'text-sky-700' },
+            { category: 'transport', title: 'Keells Darley Road (EV)', link: 'https://maps.app.goo.gl/B8nn38UZgb233HUE7', icon: 'fa-charging-station', dist: '0.8 km', color: 'text-sky-700' },
+            { category: 'transport', title: 'ChargeNET (EV)', link: 'https://maps.app.goo.gl/VtcVKfZHu1RkP5Jt9', icon: 'fa-charging-station', dist: '1 km', color: 'text-sky-700' },
+            { category: 'transport', title: 'E-shit Charging (EV)', link: 'https://maps.app.goo.gl/msZw4utGPeSFtte59', icon: 'fa-charging-station', dist: '1.4 km', color: 'text-sky-700' },
+            { category: 'transport', title: 'Ceypetco Filling Station', link: 'https://maps.app.goo.gl/PDHGsAvepDbDC77t6', icon: 'fa-gas-pump', dist: '0.5 km', color: 'text-sky-700' },
+            { category: 'transport', title: 'Ceypetco Filling Station 2', link: 'https://maps.app.goo.gl/ouKtJ1Y7BoQx3UueA', icon: 'fa-gas-pump', dist: '1.3 km', color: 'text-sky-700' },
+            { category: 'transport', title: 'IOC Filling Station', link: 'https://maps.app.goo.gl/n43Qbxs2XGBBjghV8', icon: 'fa-gas-pump', dist: '1 km', color: 'text-sky-700' },
+            
+            // Fixed Bugs Here: Removed 'note' to hide button, added explicit subtitle
+            { category: 'transport', title: 'Local Buses', subtitle: 'SLTB, Lanka Metro, Private buses', link: '', icon: 'fa-bus', color: 'text-sky-700' },
+            { category: 'transport', title: 'Ride-Hailing', subtitle: 'Uber, PickMe, Kangaroo, Hela Go', link: '#', icon: 'fa-taxi', color: 'text-sky-700', note: 'App Only' },
+
+            // Banking & Finance
+            { category: 'finance', title: 'ComBank Hyde Park', link: 'https://maps.app.goo.gl/LUCKmRtu76keFrFMA', icon: 'fa-building-columns', dist: '0.75 km', color: 'text-blue-700' },
+            { category: 'finance', title: 'ComBank - Ward Place', link: 'https://maps.app.goo.gl/rss1RUEtcndm4HrT8', icon: 'fa-building-columns', dist: '0.55 km', color: 'text-blue-700' },
+            { category: 'finance', title: 'BOC - Hyde Park', link: 'https://maps.app.goo.gl/ggUdpm27iGbXjFjH8', icon: 'fa-building-columns', dist: '0.65 km', color: 'text-blue-700' },
+            { category: 'finance', title: 'HNB Tower', link: 'https://maps.app.goo.gl/cyKxKLnjQQzGMvqG6', icon: 'fa-building-columns', dist: '0.8 km', color: 'text-blue-700' },
+            { category: 'finance', title: 'Peoples Tower', link: 'https://maps.app.goo.gl/2xHgZJW1HdXogazh7', icon: 'fa-building-columns', dist: '0.6 km', color: 'text-blue-700' },
+            { category: 'finance', title: 'MBSL - Union Place', link: 'https://maps.app.goo.gl/MVqL45fmEuL9GWSy9', icon: 'fa-building-columns', dist: '0.6 km', color: 'text-blue-700' },
+            { category: 'finance', title: 'BOC ATM 1', link: 'https://maps.app.goo.gl/usAewb8ZwQBNCJYPA', icon: 'fa-money-bill-wave', dist: '0.65 km', color: 'text-blue-700' },
+            { category: 'finance', title: 'BOC ATM 2', link: 'https://maps.app.goo.gl/W4CFUbJ7x4mXnGb97', icon: 'fa-money-bill-wave', dist: '1.2 km', color: 'text-blue-700' },
+            { category: 'finance', title: 'ComBank ATM 1', link: 'https://maps.app.goo.gl/sjDMMLx36bsiAgkZ8', icon: 'fa-money-bill-wave', dist: '1 km', color: 'text-blue-700' },
+            { category: 'finance', title: 'ComBank ATM 2', link: 'https://maps.app.goo.gl/rss1RUEtcndm4HrT8', icon: 'fa-money-bill-wave', dist: '0.55 km', color: 'text-blue-700' },
+            { category: 'finance', title: 'HNB ATM 1', link: 'https://maps.app.goo.gl/hjVWia5S1RQrUozX6', icon: 'fa-money-bill-wave', dist: '1 km', color: 'text-blue-700' },
+            { category: 'finance', title: 'HNB ATM 2', link: 'https://maps.app.goo.gl/45pCvWp1JaT7f85p7', icon: 'fa-money-bill-wave', dist: '0.65 km', color: 'text-blue-700' },
+            { category: 'finance', title: 'NSB ATM', link: 'https://maps.app.goo.gl/CwWsqrGGYERCGuGK7', icon: 'fa-money-bill-wave', dist: '0.3 km', color: 'text-blue-700' },
+            { category: 'finance', title: 'Peoples Bank ATM', link: 'https://maps.app.goo.gl/jL2egJwBgY3nMzod6', icon: 'fa-money-bill-wave', dist: '0.9 km', color: 'text-blue-700' },
+
+            // Health & Wellness
+            { category: 'health', title: 'Accident Ward', link: 'https://maps.app.goo.gl/CyPBx1xxa9iN5rxJ8', icon: 'fa-truck-medical', dist: '0.85 km', color: 'text-teal-700' },
+            { category: 'health', title: 'OPD - Gen Hospital', link: 'https://maps.app.goo.gl/8vPD71tXVUzp2YuT9', icon: 'fa-hospital', dist: '0.85 km', color: 'text-teal-700' },
+            { category: 'health', title: 'Asiri Central Hospital', link: 'https://maps.app.goo.gl/VhoMKY6Yw192rYJN9', icon: 'fa-hospital', dist: '0.65 km', color: 'text-teal-700' },
+            { category: 'health', title: 'Nawaloka Hospital', link: 'https://maps.app.goo.gl/mGzEKRgzTuqUdWAa6', icon: 'fa-hospital', dist: '1.9 km', color: 'text-teal-700' },
+            { category: 'health', title: 'Lanka Hospitals PLC', link: 'https://maps.app.goo.gl/zUkXJVFLA87bphEK9', icon: 'fa-hospital', dist: '4.8 km', color: 'text-teal-700' },
+            { category: 'health', title: 'Durdans Hospital', link: 'https://maps.app.goo.gl/119Mj46fYACtnhf19', icon: 'fa-hospital', dist: '3.1 km', color: 'text-teal-700' },
+            { category: 'health', title: 'Ninewells Hospitals', link: 'https://maps.app.goo.gl/ubDZpQrJwFPpGxYC9', icon: 'fa-hospital', dist: '4.5 km', color: 'text-teal-700' },
+            { category: 'health', title: 'Kings Hospital Colombo', link: 'https://maps.app.goo.gl/czcdnrNDRc8ENgyk9', icon: 'fa-hospital', dist: '4.1 km', color: 'text-teal-700' },
+            { category: 'health', title: 'Castle Street Hospital', link: 'https://maps.app.goo.gl/K6CTDzqJMhY1W84Z8', icon: 'fa-hospital', dist: '3 km', color: 'text-teal-700' },
+            { category: 'health', title: 'Vision Care', link: 'https://maps.app.goo.gl/5KY8mWQSLGVhtBnF7', icon: 'fa-glasses', dist: '1.5 km', color: 'text-teal-700' },
+            { category: 'health', title: 'Union Chemists', link: 'https://maps.app.goo.gl/5czBsjRWBPPYMi7XA', icon: 'fa-prescription-bottle-medical', dist: '0.3 km', color: 'text-teal-700' },
+            { category: 'health', title: 'Rajya Osu Sala', link: 'https://maps.app.goo.gl/R9Kbvp86RjMbVM7B8', icon: 'fa-prescription-bottle-medical', dist: '0.25 km', color: 'text-teal-700' },
+            { category: 'health', title: 'Medihelp Pharmacy', link: 'https://maps.app.goo.gl/rHnoWn2mWqLHGNRv8', icon: 'fa-prescription-bottle-medical', dist: '0.35 km', color: 'text-teal-700' },
+            { category: 'health', title: 'Athlete Unleashed (Gym)', link: 'https://maps.app.goo.gl/rhiXdTTp2MXyKJEA9', icon: 'fa-dumbbell', dist: '1.3 km', color: 'text-teal-700' },
+            { category: 'health', title: 'Fitness Kingdom (Gym)', link: 'https://maps.app.goo.gl/kVZcU31LyzKrBj9FA', icon: 'fa-dumbbell', dist: '0.8 km', color: 'text-teal-700' },
+            { category: 'health', title: 'Fitness First LK (Ladies)', link: 'https://maps.app.goo.gl/VZWDBjnq73Amsjq97', icon: 'fa-dumbbell', dist: '1.4 km', color: 'text-teal-700' },
+            { category: 'health', title: 'Doctor Performance (DRP)', link: 'https://maps.app.goo.gl/LkzT49Y7gQVq73SN8', icon: 'fa-dumbbell', dist: '1 km', color: 'text-teal-700' },
+            { category: 'health', title: 'Spa Ceylon Boutique', link: 'https://maps.app.goo.gl/dG8yZqXA3ivL7C1o7', icon: 'fa-spa', dist: '0.4 km', color: 'text-teal-700' },
+            { category: 'health', title: '12 stars Spa', link: 'https://maps.app.goo.gl/JaVPvSstaTrmDogH9', icon: 'fa-spa', dist: '1 km', color: 'text-teal-700' },
+            { category: 'health', title: 'Jetwing Colombo Spa', link: 'https://maps.app.goo.gl/4QzT4ZdXspaRCEDM8', icon: 'fa-spa', dist: '0.9 km', color: 'text-teal-700' },
+
+            // Faith & Worship
+            { category: 'worship', title: 'Gangarama Temple', link: 'https://maps.app.goo.gl/7Vf2ZPsF7nyTMHRs8', icon: 'fa-vihara', dist: '1.3 km', color: 'text-orange-700' },
+            { category: 'worship', title: 'Sri Vinayalankararamaya', link: 'https://maps.app.goo.gl/S9X4nU2HabTpETFo8', icon: 'fa-vihara', dist: '0.8 km', color: 'text-orange-700' },
+            { category: 'worship', title: 'Sri Kaileswaram Temple', link: 'https://maps.app.goo.gl/VuBvdFVkXhprHo2dA', icon: 'fa-om', dist: '2.2 km', color: 'text-orange-700' },
+            { category: 'worship', title: 'Ilanthoppu Amman Temple', link: 'https://maps.app.goo.gl/3i2swKAxLJeBvpRNA', icon: 'fa-om', dist: '2.1 km', color: 'text-orange-700' },
+            { category: 'worship', title: 'Church of Our Lady of Fatima', link: 'https://maps.app.goo.gl/9sRRovThDi8mAi6x8', icon: 'fa-church', dist: '1.1 km', color: 'text-orange-700' },
+            { category: 'worship', title: 'Infant Jesus Shrine', link: 'https://maps.app.goo.gl/3EVQ8udMqZ6Z596B7', icon: 'fa-church', dist: '1.8 km', color: 'text-orange-700' },
+            { category: 'worship', title: 'Dawatagaha Jumma Mosque', link: 'https://maps.app.goo.gl/4JXajvPzKQM8NkvM8', icon: 'fa-mosque', dist: '0.95 km', color: 'text-orange-700' },
+            { category: 'worship', title: 'Masjidul Thaqwa Jumma', link: 'https://maps.app.goo.gl/MSk1TDq9ZaSp86PRA', icon: 'fa-mosque', dist: '1.1 km', color: 'text-orange-700' },
+
+            // Utilities & Support
+            { category: 'utility', title: 'Salaka Senkada', link: 'https://maps.app.goo.gl/FKVV2FXWCNX9mvCh8', icon: 'fa-print', dist: '0.29 km', color: 'text-slate-700' },
+            { category: 'utility', title: 'Pasan Printers', link: 'https://maps.app.goo.gl/1v4REhNJiggNsZsZ6', icon: 'fa-print', dist: '1.6 km', color: 'text-slate-700' },
+            { category: 'utility', title: 'Cafe Pixel Printing', link: 'https://maps.app.goo.gl/viPajgMWMk79KgyTA', icon: 'fa-print', dist: '0.75 km', color: 'text-slate-700' },
+            { category: 'utility', title: 'Citypak', link: 'https://maps.app.goo.gl/skFVVHA6Eaq6DVVD7', icon: 'fa-box-open', dist: '2.4 km', color: 'text-slate-700' },
+            { category: 'utility', title: 'DHL Express', link: 'https://maps.app.goo.gl/hDFPQkrHDs6Knzbw6', icon: 'fa-truck-fast', dist: '1 km', color: 'text-slate-700' },
+            { category: 'utility', title: 'Prompt Express', link: 'https://maps.app.goo.gl/DtFFnifzFiY2fKPY9', icon: 'fa-truck-fast', dist: '1.2 km', color: 'text-slate-700' },
+            { category: 'utility', title: 'Dialog Axiata PLC', link: 'https://maps.app.goo.gl/pMB6CAGkJoYFEBTKA', icon: 'fa-tower-cell', dist: '0.15 km', color: 'text-slate-700' },
+            { category: 'utility', title: 'Mobitel (Pvt) Ltd', link: 'https://maps.app.goo.gl/CWsnrkZhgouFrpHx8', icon: 'fa-tower-cell', dist: '1.8 km', color: 'text-slate-700' },
+            { category: 'utility', title: 'SLT', link: 'https://maps.app.goo.gl/Qv8DNJ3DagkWZkZRA', icon: 'fa-phone-volume', dist: '1.7 km', color: 'text-slate-700' },
+            { category: 'utility', title: 'Multi Tooks & Hardware', link: 'https://maps.app.goo.gl/qiCgcVmgSeCaCFwb8', icon: 'fa-screwdriver-wrench', dist: '1.8 km', color: 'text-slate-700' },
+            { category: 'utility', title: 'Asian Hardware', link: 'https://maps.app.goo.gl/aheUzMVmPcsLLoqH7', icon: 'fa-screwdriver-wrench', dist: '3.8 km', color: 'text-slate-700' },
+            { category: 'utility', title: 'Platinum Hardware', link: 'https://maps.app.goo.gl/sMVkyMKizHcQhEcU6', icon: 'fa-plug', dist: '2.7 km', color: 'text-slate-700' },
+
+            // Supermarkets & Retail
+            { category: 'shopping', title: 'Keells Darley Road', link: 'https://maps.app.goo.gl/PEH9kufm5hm7iEAk7', icon: 'fa-cart-shopping', dist: '0.8 km', color: 'text-fuchsia-700' },
+            { category: 'shopping', title: 'Arpico Super Centre', link: 'https://maps.app.goo.gl/TghRPPmHaz8UUFzH8', icon: 'fa-cart-shopping', dist: '0.5 km', color: 'text-fuchsia-700' },
+            { category: 'shopping', title: 'Cargills Food City', link: 'https://maps.app.goo.gl/BgS5raXNAN9pQxHn6', icon: 'fa-basket-shopping', dist: '1 km', color: 'text-fuchsia-700' },
+            { category: 'shopping', title: 'Spar Supermarket', link: 'https://maps.app.goo.gl/2f9yZMyeVXvxQUwe6', icon: 'fa-basket-shopping', dist: '1 km', color: 'text-fuchsia-700' },
+            { category: 'shopping', title: 'Rough Collection', link: 'https://maps.app.goo.gl/WQW7kK8ffHHESnmv9', icon: 'fa-shirt', dist: '1.6 km', color: 'text-fuchsia-700' },
+            { category: 'shopping', title: 'Urban Island', link: 'https://maps.app.goo.gl/jzB1d4ncxpvTXF2z5', icon: 'fa-bag-shopping', dist: '0.8 km', color: 'text-fuchsia-700' },
+            { category: 'shopping', title: 'Nolimit', link: 'https://maps.app.goo.gl/ebSEYCvNsbrc8nKf6', icon: 'fa-shirt', dist: '0.7 km', color: 'text-fuchsia-700' },
+            { category: 'shopping', title: 'Colombo City Center', link: 'https://maps.app.goo.gl/Rn79ou3ydyoBjaSj6', icon: 'fa-shop', dist: '1.6 km', color: 'text-fuchsia-700' },
+            { category: 'shopping', title: 'DSI Showroom', link: 'https://maps.app.goo.gl/rMi5Doo2TrtWRc7n8', icon: 'fa-shoe-prints', dist: '0.12 km', color: 'text-fuchsia-700' },
+
+            // After Hours
+            { category: 'drinks', title: 'Fine Spirits - Union Place', link: 'https://maps.app.goo.gl/fniuuGyVXwS5xH7DA', icon: 'fa-wine-bottle', dist: '0.75 km', color: 'text-indigo-700' },
+            { category: 'drinks', title: 'Miranda Liquor World', link: 'https://maps.app.goo.gl/heji3XcKhst3AYPd8', icon: 'fa-martini-glass', dist: '0.35 km', color: 'text-indigo-700' },
+            { category: 'drinks', title: 'Park Street Wines', link: 'https://maps.app.goo.gl/y2BGjJ1xpkvbmzos7', icon: 'fa-wine-glass', dist: '1 km', color: 'text-indigo-700' },
+            { category: 'drinks', title: 'House of Wines', link: 'https://maps.app.goo.gl/2CkTw3wHNJUkbcpGA', icon: 'fa-wine-glass-empty', dist: '1.4 km', color: 'text-indigo-700' },
+            { category: 'drinks', title: 'Wines by VS', link: 'https://maps.app.goo.gl/mSmm3Xcq55t4N8WX7', icon: 'fa-wine-bottle', dist: '1.5 km', color: 'text-indigo-700' },
+            { category: 'drinks', title: 'Tops! Wine & Spirits', link: 'https://maps.app.goo.gl/s42nUGJAqUpEYWWH8', icon: 'fa-champagne-glasses', dist: '0.95 km', color: 'text-indigo-700' },
+            { category: 'drinks', title: 'Park Street Pub', link: 'https://maps.app.goo.gl/W23TUVx9a8C3quev5', icon: 'fa-beer-mug-empty', dist: '0.85 km', color: 'text-indigo-700' },
+            { category: 'drinks', title: 'Ti Amo', link: 'https://maps.app.goo.gl/8d6gmc6teX7yi9Fz5', icon: 'fa-martini-glass-citrus', dist: '1 km', color: 'text-indigo-700' },
+            { category: 'drinks', title: 'The Warehouse', link: 'https://maps.app.goo.gl/Q6Vzfp1n8C1LMjHd8', icon: 'fa-beer-mug-empty', dist: '0.85 km', color: 'text-indigo-700' },
+            { category: 'drinks', title: 'Replay Sports Bar', link: 'https://maps.app.goo.gl/9yRoSYziaRgB6ov77', icon: 'fa-glass-cheers', dist: '0.4 km', color: 'text-indigo-700' },
+            { category: 'drinks', title: 'Uncle’s Bar', link: 'https://maps.app.goo.gl/4Qt3dWgLgSUKtFth8', icon: 'fa-glass-water', dist: '0.95 km', color: 'text-indigo-700' },
+
+            // Emergency
+            { category: 'emergency', title: 'Police Emergency', link: 'tel:119', icon: 'fa-shield-halved', isEmergency: true, note: '119' },
+            { category: 'emergency', title: 'Police Help Desk', link: 'tel:118', icon: 'fa-shield-halved', isEmergency: true, note: '118' },
+            { category: 'emergency', title: 'Police Mobile Squads', link: 'tel:112', icon: 'fa-shield-halved', isEmergency: true, note: '112' },
+            { category: 'emergency', title: 'Tourist Police', link: 'tel:1912', icon: 'fa-shield-halved', isEmergency: true, note: '1912' },
+            { category: 'emergency', title: 'Bomb Disposal Unit', link: 'tel:0112434251', icon: 'fa-bomb', isEmergency: true, note: 'Call' },
+            { category: 'emergency', title: 'Gov Info Centre', link: 'tel:1919', icon: 'fa-circle-info', isEmergency: true, note: '1919' },
+            { category: 'emergency', title: 'Suwa Seriya Ambulance', link: 'tel:1990', icon: 'fa-truck-medical', isEmergency: true, note: '1990' },
+            { category: 'emergency', title: 'Fire & Rescue', link: 'tel:110', icon: 'fa-fire-extinguisher', isEmergency: true, note: '110' },
+            { category: 'emergency', title: 'Nat. Hospital Accident', link: 'tel:0112691111', icon: 'fa-truck-medical', isEmergency: true, note: 'Call' },
+            { category: 'emergency', title: 'Disaster Mgmt', link: 'tel:117', icon: 'fa-triangle-exclamation', isEmergency: true, note: '117' },
+            { category: 'emergency', title: 'Child Protection', link: 'tel:1929', icon: 'fa-child-reaching', isEmergency: true, note: '1929' },
+            { category: 'emergency', title: 'Women/Child Abuse', link: 'tel:109', icon: 'fa-person-harassing', isEmergency: true, note: '109' },
+            { category: 'emergency', title: 'Women\'s Help Line', link: 'tel:1938', icon: 'fa-phone-volume', isEmergency: true, note: '1938' },
+            { category: 'emergency', title: 'CCC Counseling', link: 'tel:1333', icon: 'fa-hand-holding-heart', isEmergency: true, note: '1333' },
+            { category: 'emergency', title: 'Mental Health', link: 'tel:1926', icon: 'fa-brain', isEmergency: true, note: '1926' },
+            { category: 'emergency', title: 'CEB Electricity', link: 'tel:1987', icon: 'fa-bolt', isEmergency: true, note: '1987' },
+            { category: 'emergency', title: 'LECO Electricity', link: 'tel:1910', icon: 'fa-bolt', isEmergency: true, note: '1910' },
+            { category: 'emergency', title: 'Water Board', link: 'tel:1939', icon: 'fa-faucet-drip', isEmergency: true, note: '1939' }
+        ];
+
+        function renderCards(filter = 'all') {
+            const grid = document.getElementById('directory-grid');
+            grid.innerHTML = ''; 
+            const filteredData = filter === 'all' ? directoryData : directoryData.filter(item => item.category === filter);
+
+            filteredData.forEach(item => {
+                const isEmergency = item.isEmergency || false;
+                let cardBgClass = '', btnStyleClass = '', titleColor = '';
+
+                switch(item.category) {
+                    case 'food': cardBgClass = 'bg-emerald-50 border-emerald-200 hover:bg-emerald-100'; btnStyleClass = 'bg-emerald-100 text-emerald-800 hover:bg-emerald-600 hover:text-white border-emerald-200'; titleColor = 'text-emerald-900'; break;
+                    case 'transport': cardBgClass = 'bg-sky-50 border-sky-200 hover:bg-sky-100'; btnStyleClass = 'bg-sky-100 text-sky-800 hover:bg-sky-600 hover:text-white border-sky-200'; titleColor = 'text-sky-900'; break;
+                    case 'finance': cardBgClass = 'bg-blue-50 border-blue-200 hover:bg-blue-100'; btnStyleClass = 'bg-blue-100 text-blue-800 hover:bg-blue-600 hover:text-white border-blue-200'; titleColor = 'text-blue-900'; break;
+                    case 'health': cardBgClass = 'bg-teal-50 border-teal-200 hover:bg-teal-100'; btnStyleClass = 'bg-teal-100 text-teal-800 hover:bg-teal-600 hover:text-white border-teal-200'; titleColor = 'text-teal-900'; break;
+                    case 'worship': cardBgClass = 'bg-orange-50 border-orange-200 hover:bg-orange-100'; btnStyleClass = 'bg-orange-100 text-orange-800 hover:bg-orange-600 hover:text-white border-orange-200'; titleColor = 'text-orange-900'; break;
+                    case 'utility': cardBgClass = 'bg-slate-100 border-slate-200 hover:bg-slate-200'; btnStyleClass = 'bg-slate-200 text-slate-800 hover:bg-slate-600 hover:text-white border-slate-300'; titleColor = 'text-slate-900'; break;
+                    case 'shopping': cardBgClass = 'bg-fuchsia-50 border-fuchsia-200 hover:bg-fuchsia-100'; btnStyleClass = 'bg-fuchsia-100 text-fuchsia-800 hover:bg-fuchsia-600 hover:text-white border-fuchsia-200'; titleColor = 'text-fuchsia-900'; break;
+                    case 'drinks': cardBgClass = 'bg-indigo-50 border-indigo-200 hover:bg-indigo-100'; btnStyleClass = 'bg-indigo-100 text-indigo-800 hover:bg-indigo-600 hover:text-white border-indigo-200'; titleColor = 'text-indigo-900'; break;
+                    case 'emergency': cardBgClass = 'bg-red-50 border-red-300 hover:bg-red-100 shadow-md'; btnStyleClass = 'bg-red-600 text-white hover:bg-red-700 border-red-700 shadow-sm'; titleColor = 'text-red-900 font-bold'; break;
+                    default: cardBgClass = 'bg-white border-gray-200 hover:bg-gray-50'; btnStyleClass = 'bg-gray-100 text-gray-800 hover:bg-gray-600 hover:text-white border-gray-200'; titleColor = 'text-gray-900';
+                }
+
+                const finalCardClass = `${cardBgClass} border shadow-sm rounded-xl p-3 flex items-center justify-between transition-all duration-200 transform hover:-translate-y-1 w-full`;
+                let buttonHTML = '';
+                
+                if (item.link && item.link !== '#') {
+                    const linkTarget = item.link.startsWith('tel:') ? '' : 'target="_blank"';
+                    const btnText = isEmergency ? (item.note || 'Call') : 'Map <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i>';
+                    buttonHTML = `<a href="${item.link}" ${linkTarget} class="${btnStyleClass} border px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider flex-shrink-0 ml-2 text-center min-w-[70px] sm:min-w-[80px] transition-colors">${btnText}</a>`;
+                } else if (item.note) {
+                    const badgeText = item.note || 'Info';
+                    buttonHTML = `<span class="bg-white/60 text-slate-500 border border-slate-200 px-3 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider flex-shrink-0 ml-2 text-center min-w-[70px] sm:min-w-[80px]">${badgeText}</span>`;
+                }
+
+                const subtitleHTML = item.subtitle ? `<div class="text-[11px] text-slate-500 leading-tight mt-0.5 whitespace-normal pr-2">${item.subtitle}</div>` : '';
+                const distanceHTML = item.dist ? `<div class="text-[11px] font-medium opacity-80 mt-1 flex items-center"><i class="fa-solid fa-person-walking mr-1.5 opacity-70"></i>~${item.dist}</div>` : '';
+
+                const cardHTML = `
+                    <div class="${finalCardClass}">
+                        <div class="flex items-center gap-3 w-full max-w-[calc(100%-80px)]">
+                            <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm flex-shrink-0">
+                                <i class="fa-solid ${item.icon} ${item.color} text-lg"></i>
+                            </div>
+                            <div class="flex flex-col min-w-0 pr-1 w-full">
+                                <h3 class="${titleColor} ${!isEmergency ? 'font-bold' : ''} text-sm leading-tight truncate w-full" title="${item.title}">${item.title}</h3>
+                                ${subtitleHTML}
+                                ${distanceHTML}
+                            </div>
+                        </div>
+                        ${buttonHTML}
+                    </div>
+                `;
+                grid.innerHTML += cardHTML;
+            });
+        }
+
+        function filterItems(category, btnElement) {
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+                const classes = btn.className.split(' ').filter(c => !c.startsWith('bg-') && !c.startsWith('text-') && !c.startsWith('border-') || c.includes('hover:'));
+                btn.className = classes.join(' ');
+                btn.classList.add('bg-white', 'border-gray-300', 'text-gray-700');
+            });
+            
+            btnElement.classList.add('active');
+            btnElement.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
+            
+            switch(category) {
+                case 'all': btnElement.classList.add('bg-emerald-600', 'text-white', 'border-emerald-600'); break;
+                case 'food': btnElement.classList.add('bg-emerald-600', 'text-white', 'border-emerald-600'); break;
+                case 'transport': btnElement.classList.add('bg-sky-600', 'text-white', 'border-sky-600'); break;
+                case 'finance': btnElement.classList.add('bg-blue-600', 'text-white', 'border-blue-600'); break;
+                case 'health': btnElement.classList.add('bg-teal-600', 'text-white', 'border-teal-600'); break;
+                case 'worship': btnElement.classList.add('bg-orange-600', 'text-white', 'border-orange-600'); break;
+                case 'utility': btnElement.classList.add('bg-slate-600', 'text-white', 'border-slate-600'); break;
+                case 'shopping': btnElement.classList.add('bg-fuchsia-600', 'text-white', 'border-fuchsia-600'); break;
+                case 'drinks': btnElement.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600'); break;
+                case 'emergency': btnElement.classList.add('bg-red-600', 'text-white', 'border-red-600'); break;
+            }
+            renderCards(category);
+        }
+        renderCards('all');
+    </script>
+</body>
+</html>
